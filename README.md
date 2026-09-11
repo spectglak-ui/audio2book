@@ -4,23 +4,23 @@
 
 Générez des livres audio premium avec des voix réalistes, 100% hors ligne sur votre GPU NVIDIA.
 
-## ✨ Fonctionnalités
+##  Fonctionnalités
 
-- 🚀 **100% Local** — Aucune donnée ne quitte votre machine
-- 🎙️ **Voix Réalistes** — Propulsé par XTTS-v2 avec clonage de voix
-- 📚 **Mode Livre Audio** — Gestion de chapitres, import .txt, export MP3 avec métadonnées
-- 🎨 **Interface Moderne** — Thèmes clair/sombre, visualisation audio
-- ⚡ **Accéléré GPU** — Optimisé pour NVIDIA RTX
-- 🔒 **Privacy First** — Votre texte et vos voix restent chez vous
+-  **100% Local** — Aucune donnée ne quitte votre machine
+-  **Voix Réalistes** — Propulsé par XTTS-v2 avec clonage de voix
+-  **Mode Livre Audio** — Gestion de chapitres, import .txt, export MP3 avec métadonnées
+-  **Interface Moderne** — Thèmes clair/sombre, visualisation audio
+-  **Accéléré GPU** — Optimisé pour NVIDIA RTX
+-  **Privacy First** — Votre texte et vos voix restent chez vous
 
-## 🛠️ Stack Technique
+##  Stack Technique
 
 - **Backend**: Python 3.11 + FastAPI + XTTS-v2
 - **Frontend**: React + TypeScript + Tailwind CSS
 - **Desktop**: Tauri 2 (Rust)
 - **Audio**: FFmpeg + SoundFile
 
-## 📦 Installation
+##  Installation
 
 ### Prérequis
 - Python 3.11
