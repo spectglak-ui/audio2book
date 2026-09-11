@@ -14,12 +14,10 @@ function App() {
   const [selectedVoice, setSelectedVoice] = useState("french_narrator");
   const [health, setHealth] = useState<{ ok: boolean; gpu: string | null; loaded: boolean }>({ ok: false, gpu: null, loaded: false });
 
-  // Studio
   const [studioText, setStudioText] = useState("");
   const [studioLoading, setStudioLoading] = useState(false);
   const [studioAudioUrl, setStudioAudioUrl] = useState<string | null>(null);
 
-  // Books
   const [books, setBooks] = useState<any[]>([]);
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
   const [newBookTitle, setNewBookTitle] = useState("");
@@ -27,7 +25,6 @@ function App() {
   const [bookGenerating, setBookGenerating] = useState(false);
   const [bookProgress, setBookProgress] = useState<{ current: number; total: number } | null>(null);
 
-  // Voices
   const [newVoiceName, setNewVoiceName] = useState("");
   const [recording, setRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -235,7 +232,6 @@ function App() {
           <img src={logo} alt="Logo" className="h-10 w-10 rounded-xl" />
           <h1 className="text-xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">Audio2Book</h1>
         </div>
-
         <nav className="flex-1 space-y-2">
           {[
             { id: "studio", label: "Studio Rapide", icon: "M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" },
@@ -249,7 +245,6 @@ function App() {
             </button>
           ))}
         </nav>
-
         <div className={`mt-auto p-3 rounded-xl ${theme === "dark" ? "bg-zinc-800/50 border-white/5" : "bg-zinc-100 border-zinc-200"} border text-xs`}>
           <div className="flex items-center gap-2 mb-1">
             <span className={`h-2 w-2 rounded-full ${health.ok && health.loaded ? "bg-green-500" : "bg-red-500"}`} />

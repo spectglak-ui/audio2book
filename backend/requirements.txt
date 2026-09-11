@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+numpy<2
+torch
+torchaudio
+coqui-tts
+soundfile
+transformers>=4.57,<5

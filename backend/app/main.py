@@ -45,7 +45,8 @@ def load_settings():
     return {"theme": "dark", "default_format": "mp3"}
 
 def save_settings(data):
-    with open(SETTINGS_FILE, "w", encoding="utf-8") as f: json.dump(data, f, ensure_ascii=False, indent=2)
+    with open(SETTINGS_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 def load_book(book_id: str):
     path = BOOKS_DIR / f"{book_id}.json"
@@ -55,7 +56,8 @@ def load_book(book_id: str):
 
 def save_book(book: dict):
     with books_lock:
-        with open(BOOKS_DIR / f"{book['id']}.json", "w", encoding="utf-8") as f: json.dump(book, f, ensure_ascii=False, indent=2)
+        with open(BOOKS_DIR / f"{book['id']}.json", "w", encoding="utf-8") as f:
+            json.dump(book, f, ensure_ascii=False, indent=2)
 
 def book_dir(book_id: str) -> Path: return BOOKS_DIR / book_id
 
@@ -80,7 +82,8 @@ def split_text(text: str, max_chars: int = 220):
     for sentence in sentences:
         sentence = sentence.strip()
         if not sentence: continue
-        if len(current) + len(sentence) + 1 <= max_chars: current = (current + " " + sentence).strip()
+        if len(current) + len(sentence) + 1 <= max_chars:
+            current = (current + " " + sentence).strip()
         else:
             if current: segments.append(current)
             while len(sentence) > max_chars:
@@ -93,7 +96,8 @@ def split_text(text: str, max_chars: int = 220):
     return segments
 
 def synthesize_segment(text: str, voice_path: Path, language: str) -> np.ndarray:
-    with MODEL_LOCK: wav = tts.tts(text=text, speaker_wav=str(voice_path), language=language)
+    with MODEL_LOCK:
+        wav = tts.tts(text=text, speaker_wav=str(voice_path), language=language)
     wav_array = np.asarray(wav, dtype=np.float32)
     if wav_array.ndim == 2: wav_array = wav_array[0]
     return wav_array
@@ -163,7 +167,10 @@ def process_tts_job(job: dict):
     full_audio, _ = build_audio(job["text"], job["voice_path"], job["language"], job["normalize"], progress_callback=update_progress)
     output_path = OUTPUT_DIR / f"{job['id']}.wav"
     sf.write(output_path, full_audio, SAMPLE_RATE)
-    with jobs_lock: job["status"] = "completed"; job["audio_url"] = f"/files/{job['id']}.wav"; job["duration_seconds"] = round(len(full_audio) / SAMPLE_RATE, 2)
+    with jobs_lock:
+        job["status"] = "completed"
+        job["audio_url"] = f"/files/{job['id']}.wav"
+        job["duration_seconds"] = round(len(full_audio) / SAMPLE_RATE, 2)
 
 def process_book_job(job: dict):
     book_id = job["book_id"]
@@ -184,11 +191,18 @@ def process_book_job(job: dict):
             bdir = book_dir(book_id); bdir.mkdir(parents=True, exist_ok=True)
             fname = f"chapter_{chapter['index']:03d}.wav"
             sf.write(bdir / fname, audio, SAMPLE_RATE)
-            chapter["status"] = "generated"; chapter["audio_file"] = fname; chapter["duration_seconds"] = round(len(audio) / SAMPLE_RATE, 2); chapter["error"] = None
-        except Exception as error: chapter["status"] = "error"; chapter["error"] = str(error)
+            chapter["status"] = "generated"
+            chapter["audio_file"] = fname
+            chapter["duration_seconds"] = round(len(audio) / SAMPLE_RATE, 2)
+            chapter["error"] = None
+        except Exception as error:
+            chapter["status"] = "error"
+            chapter["error"] = str(error)
         save_book(book)
         with jobs_lock: job["progress"] = {"chapter_current": index + 1, "chapter_total": total_chapters, "segment_current": 0, "segment_total": 0}
-    with jobs_lock: job["status"] = "completed"; job["duration_seconds"] = sum(c.get("duration_seconds", 0) for c in book["chapters"])
+    with jobs_lock:
+        job["status"] = "completed"
+        job["duration_seconds"] = sum(c.get("duration_seconds", 0) for c in book["chapters"])
 
 def worker_loop():
     warmup()
@@ -204,13 +218,18 @@ def worker_loop():
         except Exception as error:
             with jobs_lock:
                 job = jobs.get(job_id)
-                if job is not None: job["status"] = "error"; job["error"] = str(error)
+                if job is not None:
+                    job["status"] = "error"
+                    job["error"] = str(error)
             print(f"[Audio2Book] Erreur job {job_id} : {error}")
         finally: job_queue.task_done()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    try: load_model(); threading.Thread(target=worker_loop, daemon=True).start(); print("[Audio2Book] Worker demarre.")
+    try:
+        load_model()
+        threading.Thread(target=worker_loop, daemon=True).start()
+        print("[Audio2Book] Worker demarre.")
     except Exception as error: print(f"[Audio2Book] ERREUR au chargement : {error}")
     yield
 
@@ -220,14 +239,31 @@ app.mount("/files", StaticFiles(directory=OUTPUT_DIR), name="files")
 app.mount("/bookfiles", StaticFiles(directory=BOOKS_DIR), name="bookfiles")
 app.mount("/voicefiles", StaticFiles(directory=VOICES_DIR), name="voicefiles")
 
-class TTSRequest(BaseModel): text: str; voice_id: str = "french_narrator"; language: str = "fr"; normalize: bool = True
-class BookCreate(BaseModel): title: str; author: str = ""; voice_id: str = "french_narrator"; language: str = "fr"
-class ImportRequest(BaseModel): text: str; split_mode: str = "auto"
-class BookGenerateRequest(BaseModel): voice_id: str | None = None
-class ExportRequest(BaseModel): format: str = "mp3"
+class TTSRequest(BaseModel):
+    text: str
+    voice_id: str = "french_narrator"
+    language: str = "fr"
+    normalize: bool = True
+
+class BookCreate(BaseModel):
+    title: str
+    author: str = ""
+    voice_id: str = "french_narrator"
+    language: str = "fr"
+
+class ImportRequest(BaseModel):
+    text: str
+    split_mode: str = "auto"
+
+class BookGenerateRequest(BaseModel):
+    voice_id: str | None = None
+
+class ExportRequest(BaseModel):
+    format: str = "mp3"
 
 @app.get("/")
-def root(): return {"software": "Audio2Book", "status": "running", "engine": "xtts-v2", "model_loaded": tts is not None}
+def root():
+    return {"software": "Audio2Book", "status": "running", "engine": "xtts-v2", "model_loaded": tts is not None}
 
 @app.get("/api/health")
 def health():
@@ -238,10 +274,13 @@ def health():
 def get_settings(): return load_settings()
 
 @app.post("/api/settings")
-def update_settings(data: dict): save_settings(data); return {"status": "ok"}
+def update_settings(data: dict):
+    save_settings(data)
+    return {"status": "ok"}
 
 @app.post("/api/open_folder")
-def open_folder(folder: str):
+def open_folder(data: dict):
+    folder = data.get("folder", "outputs")
     path = BASE_DIR / folder
     if not path.exists(): path.mkdir(parents=True, exist_ok=True)
     if sys.platform == "win32": subprocess.Popen(f'explorer "{path}"')
@@ -250,7 +289,8 @@ def open_folder(folder: str):
     return {"status": "opened"}
 
 @app.get("/api/voices")
-def list_voices(): return {"voices": [{"id": v.stem, "url": f"/voicefiles/{v.name}"} for v in VOICES_DIR.glob("*.wav")]}
+def list_voices():
+    return {"voices": [{"id": v.stem, "url": f"/voicefiles/{v.name}"} for v in VOICES_DIR.glob("*.wav")]}
 
 @app.post("/api/voices/upload")
 async def upload_voice(voice_id: str = Form(...), file: UploadFile = File(...)):
@@ -294,7 +334,8 @@ def generate_tts(request: TTSRequest):
 @app.post("/api/books")
 def create_book(request: BookCreate):
     book = {"id": str(uuid.uuid4()), "title": request.title.strip(), "author": request.author.strip(), "voice_id": request.voice_id, "language": request.language, "created_at": time.strftime("%Y-%m-%d %H:%M:%S"), "chapters": []}
-    save_book(book); return book
+    save_book(book)
+    return book
 
 @app.get("/api/books")
 def list_books():
@@ -316,7 +357,8 @@ def get_book(book_id: str):
 def delete_book(book_id: str):
     path = BOOKS_DIR / f"{book_id}.json"
     if not path.exists(): raise HTTPException(404, "Livre introuvable")
-    path.unlink(); shutil.rmtree(book_dir(book_id), ignore_errors=True)
+    path.unlink()
+    shutil.rmtree(book_dir(book_id), ignore_errors=True)
     return {"status": "deleted"}
 
 @app.post("/api/books/{book_id}/import")
@@ -340,7 +382,9 @@ def generate_book(book_id: str, request: BookGenerateRequest):
     if not pending: raise HTTPException(400, "Tous les chapitres sont deja generes.")
     job_id = str(uuid.uuid4())
     job = {"id": job_id, "type": "book", "book_id": book_id, "status": "queued", "progress": {"chapter_current": 0, "chapter_total": len(pending), "segment_current": 0, "segment_total": 0}, "voice_id": request.voice_id, "audio_url": None, "duration_seconds": None, "error": None}
-    with jobs_lock: jobs[job_id] = job; book_job_ids[book_id] = job_id
+    with jobs_lock:
+        jobs[job_id] = job
+        book_job_ids[book_id] = job_id
     job_queue.put(job_id)
     return {"job_id": job_id, "status": "queued", "chapters": len(pending)}
 
@@ -366,7 +410,8 @@ def export_book(book_id: str, request: ExportRequest):
         wavs.append(np.zeros(int(SAMPLE_RATE * 0.7), dtype=np.float32))
     full_audio = np.concatenate(wavs)
     peak_normalize(full_audio)
-    export_dir = bdir / "export"; export_dir.mkdir(parents=True, exist_ok=True)
+    export_dir = bdir / "export"
+    export_dir.mkdir(parents=True, exist_ok=True)
     slug = re.sub(r"[^a-z0-9]+", "-", book["title"].lower()).strip("-") or "livre"
     wav_path = export_dir / f"{slug}.wav"
     sf.write(wav_path, full_audio, SAMPLE_RATE)
@@ -376,6 +421,7 @@ def export_book(book_id: str, request: ExportRequest):
         if ffmpeg:
             mp3_path = export_dir / f"{slug}.mp3"
             cmd = [ffmpeg, "-y", "-i", str(wav_path), "-b:a", "192k", "-metadata", f"title={book['title']}", "-metadata", f"artist={book.get('author') or 'Audio2Book'}", str(mp3_path)]
-            if subprocess.run(cmd, capture_output=True, text=True).returncode == 0: out_path = mp3_path
+            if subprocess.run(cmd, capture_output=True, text=True).returncode == 0:
+                out_path = mp3_path
     relative = out_path.relative_to(BOOKS_DIR).as_posix()
     return {"status": "exported", "format": out_path.suffix.lstrip("."), "url": f"/bookfiles/{relative}", "path": str(out_path), "size_mb": round(out_path.stat().st_size / 1_000_000, 2), "duration_seconds": round(len(full_audio) / SAMPLE_RATE, 2)}
