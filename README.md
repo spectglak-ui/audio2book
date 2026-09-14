@@ -1,8 +1,8 @@
-# 🎧 Audio2Book
+# Audio2Book
 
 **Studio de livres audio local propulsé par XTTS-v2**
 
-Générez des livres audio premium avec des voix réalistes, 100% hors ligne sur votre GPU NVIDIA.
+Générez des livres audio avec des voix réalistes, 100% hors ligne sur votre GPU NVIDIA.
 
 ##  Fonctionnalités
 
