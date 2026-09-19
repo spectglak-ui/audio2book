@@ -1,27 +1,36 @@
 ```
+# Tauri build artifacts
+frontend/src-tauri/target/
+frontend/src-tauri/node_modules/
+**/*.rs.bk
+Cargo.lock
+
+# General Rust artifacts
+target/
+Cargo.lock
+
 # Dependencies
 node_modules/
-target/
+**/node_modules/
 
-# Tauri specific
-frontend/src-tauri/target/
-**/*.rs.bk
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Build artifacts
-dist/
-build/
+# Logs
+*.log
 
 # Environment
 .env
 .env.local
 *.env.*
 
-# Editors
-.vscode/
-.idea/
-
-# Logs
-*.log
+# Build outputs
+dist/
+build/
+*.tmp
 
 # Python (if applicable)
 __pycache__/
@@ -31,5 +40,4 @@ __pycache__/
 .Python
 venv/
 .venv/
-.env
 ```
