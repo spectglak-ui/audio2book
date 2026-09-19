@@ -37,7 +37,7 @@
       "icons/icon.ico"
     ],
     "resources": [
-      "../backend/**/*"
+      "../../backend/**/*"
     ],
     "createUpdaterArtifacts": false
   }
