@@ -40,4 +40,9 @@ __pycache__/
 .Python
 venv/
 .venv/
+
+echo "backend/build/" >> .gitignore
+echo "backend/dist/" >> .gitignore
+echo "__pycache__/" >> .gitignore
+echo "*.pyc" >> .gitignore
 ```
