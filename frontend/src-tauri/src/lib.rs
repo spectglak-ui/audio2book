@@ -16,9 +16,13 @@ struct BackendProcess(Mutex<Option<Child>>);
 fn find_backend_dir() -> Option<PathBuf> {
     let mut candidates: Vec<PathBuf> = Vec::new();
 
-    // 1. Variable d'environnement (override pratique)
-    if let Ok(env_dir) = std::env::var("AUDIO2BOOK_BACKEND_DIR") {
-        candidates.push(PathBuf::from(env_dir));
+    // 1. Version installee : exe place dans ProgramFiles/Audio2Book/
+    // Le backend est inclus dans les ressources du bundle a cote de l'exe
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(dir) = exe.parent() {
+            // En production, le backend est copie a cote de l'executable
+            candidates.push(dir.join("backend"));
+        }
     }
 
     // 2. Developpement : cwd = frontend/
@@ -26,16 +30,10 @@ fn find_backend_dir() -> Option<PathBuf> {
         candidates.push(cwd.join("..").join("backend"));
     }
 
-    // 3. Version portable : exe place dans audio2book/app/
-    if let Ok(exe) = std::env::current_exe() {
-        if let Some(dir) = exe.parent() {
-            candidates.push(dir.join("..").join("..").join("backend"));
-            candidates.push(dir.join("..").join("backend"));
-        }
+    // 3. Variable d'environnement (override pratique pour dev/test)
+    if let Ok(env_dir) = std::env::var("AUDIO2BOOK_BACKEND_DIR") {
+        candidates.push(PathBuf::from(env_dir));
     }
-
-    // 4. Fallback : emplacement connu
-    candidates.push(PathBuf::from(r"C:\Users\spect\audio2book\backend"));
 
     candidates
         .into_iter()

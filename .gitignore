@@ -1,33 +1,35 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-.venv/
-backend/backend.log
-backend/settings.json
-backend/outputs/
-backend/temp/
-backend/books/
-backend/voices/xtts/*.wav
-!backend/voices/xtts/.gitkeep
-
-# Node.js
+```
+# Dependencies
 node_modules/
-frontend/dist/
-frontend/src-tauri/target/
-*.log
-npm-debug.log*
+target/
 
-# IDE
+# Tauri specific
+frontend/src-tauri/target/
+**/*.rs.bk
+
+# Build artifacts
+dist/
+build/
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
 .vscode/
 .idea/
-*.swp
-*.swo
-.DS_Store
-Thumbs.db
 
-# Builds
-*.exe
-*.msi
-*.dmg
-*.AppImage
+# Logs
+*.log
+
+# Python (if applicable)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+.env
+```
