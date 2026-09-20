@@ -13,7 +13,7 @@ Générez des livres audio avec des voix réalistes, 100% hors ligne sur votre G
 -  **Accéléré GPU** — Optimisé pour NVIDIA RTX
 -  **Privacy First** — Votre texte et vos voix restent chez vous
 
-<img width="1 132" height="651" alt="Capture d&#39;écran 2026-09-20 103921" src="https://github.com/user-attachments/assets/080f4fd9-3ae8-406a-afc2-6242aba8c2bf" />
+<img width="1282" height="801" alt="Capture d&#39;écran 2026-09-20 103921" src="https://github.com/user-attachments/assets/c82d89d8-8988-4077-99fa-85e5e4fa5536" />
 
 ##  Stack Technique
 
