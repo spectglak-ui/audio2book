@@ -1,5 +1,5 @@
 # Audio2Book
-<img width="1282" height="801" alt="Capture d&#39;écran 2026-09-20 103921" src="https://github.com/user-attachments/assets/52d80b54-3f1f-4a81-8ce0-e67fac62ec7d" />
+
 **Studio de livres audio local propulsé par XTTS-v2**
 
 Générez des livres audio avec des voix réalistes, 100% hors ligne sur votre GPU NVIDIA.
@@ -12,7 +12,7 @@ Générez des livres audio avec des voix réalistes, 100% hors ligne sur votre G
 -  **Interface Moderne** — Thèmes clair/sombre, visualisation audio
 -  **Accéléré GPU** — Optimisé pour NVIDIA RTX
 -  **Privacy First** — Votre texte et vos voix restent chez vous
-
+<img width="1 132" height="651" alt="Capture d&#39;écran 2026-09-20 103921" src="https://github.com/user-attachments/assets/52d80b54-3f1f-4a81-8ce0-e67fac62ec7d" />
 ##  Stack Technique
 
 - **Backend**: Python 3.11 + FastAPI + XTTS-v2
