@@ -12,7 +12,9 @@ Générez des livres audio avec des voix réalistes, 100% hors ligne sur votre G
 -  **Interface Moderne** — Thèmes clair/sombre, visualisation audio
 -  **Accéléré GPU** — Optimisé pour NVIDIA RTX
 -  **Privacy First** — Votre texte et vos voix restent chez vous
+
 <img width="1 132" height="651" alt="Capture d&#39;écran 2026-09-20 103921" src="https://github.com/user-attachments/assets/080f4fd9-3ae8-406a-afc2-6242aba8c2bf" />
+
 ##  Stack Technique
 
 - **Backend**: Python 3.11 + FastAPI + XTTS-v2
